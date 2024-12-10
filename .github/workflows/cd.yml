@@ -1,0 +1,18 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Delete Docker Image and Containers
+        run: sudo docker rm -f ksh1109
+      - name: Pull Docker Image from Docker hub
+        run: sudo docker pull ksh1109/songdo:latest
+      - name: Execute Docker Container
+        run : sudo docker run -d -p 80:3000 --name ksh1109 ksh1109/songdo:latest
